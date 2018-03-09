@@ -4,6 +4,7 @@
     <input type="email" name="email" v-model="email" placeholder="Email" />
     <input type="password" name="password" v-model="password" placeholder="Password" />
     <button @click="register" type="button" name="button">Register</button>
+    {{ this.$store.state.username }}
   </div>
 </template>
 
@@ -12,13 +13,19 @@ import Authentication from '../services/AuthenticationService'
 export default {
   data () {
     return {
-      email: null, // Default value
-      password: null
+      email: 'midhun', // Default value
+      password: null,
+      count: this.$store.state.count
+    }
+  },
+  computed: {
+    test () {
+      return this.$store.getters.increaseCount;
     }
   },
   watch: {
-    email (value) { // Onchange of the value
-      console.log('Email has changed');
+    password (value) { // Onchange of the value
+      console.log('password has changed');
     }
   },
   mounted () {
@@ -31,9 +38,8 @@ export default {
       const response = await Authentication.register({
         email: this.email,
         password: this.password
-      })
-      console.log(response.data);
-      console.log('next');
+      });
+      this.$store.dispatch('setValue', response.data);
     }
   }
 }
